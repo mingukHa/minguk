@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerCameraController : MonoBehaviour
 {
     public Transform cameraRig; // 카메라 리그
     public OVRInput.Controller leftController;  // 왼쪽 컨트롤러
@@ -19,13 +19,16 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // 두 컨트롤러의 입력을 결합하여 이동 처리
-        bool isMoving = HandleCombinedMovement(leftController, rightController);
+        bool isMoving = HandleMovement(leftController, rightController);
 
-        // 각각의 컨트롤러로 회전 처리
-        HandleRotation(
-            leftController, ref initialLeftControllerRotation, ref isLeftRotating, true); // 왼쪽 컨트롤러: 우회전만
-        HandleRotation(
-            rightController, ref initialRightControllerRotation, ref isRightRotating, false); // 오른쪽 컨트롤러: 좌회전만
+        if (!isMoving)
+        {
+            // 각각의 컨트롤러로 회전 처리
+            HandleRotation(
+                leftController, ref initialLeftControllerRotation, ref isLeftRotating, true); // 왼쪽 컨트롤러: 우회전만
+            HandleRotation(
+                rightController, ref initialRightControllerRotation, ref isRightRotating, false); // 오른쪽 컨트롤러: 좌회전만
+        }
 
         // 감속(관성) 처리 또는 브레이크 처리
         ApplyBrakingOrDamping(isMoving);
@@ -34,7 +37,7 @@ public class PlayerController : MonoBehaviour
         cameraRig.position += velocity * Time.deltaTime;
     }
 
-    private bool HandleCombinedMovement(OVRInput.Controller left, OVRInput.Controller right)
+    private bool HandleMovement(OVRInput.Controller left, OVRInput.Controller right)
     {
         // 왼쪽 컨트롤러의 입력 처리
         Vector3 leftControllerDirection = OVRInput.GetLocalControllerRotation(left) * Vector3.forward;
@@ -117,7 +120,7 @@ public class PlayerController : MonoBehaviour
         if ((isLeftTriggerPressed || isRightTriggerPressed) && velocity.magnitude < 0.5f)
         {
             // 속도가 0.5f 이하일 때 브레이크 효과 적용
-            velocity = Vector3.Lerp(velocity, Vector3.zero, 0.2f); // 속도를 천천히 감소시킴
+            velocity = Vector3.Lerp(velocity, Vector3.zero, 0.1f); // 속도를 천천히 감소시킴
         }
         else
         {
