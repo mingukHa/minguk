@@ -21,7 +21,7 @@ public class silentPlayer : MonoBehaviour
     }
     private void Start()
     {
-        nms.BuildNavMesh();
+   //     nms.BuildNavMesh();
     }
 
     private void Update()
