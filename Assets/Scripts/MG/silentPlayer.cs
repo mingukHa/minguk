@@ -1,7 +1,7 @@
 using Oculus.Interaction.Surfaces;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.AI;
+
 
 public class silentPlayer : MonoBehaviour
 {
@@ -21,7 +21,7 @@ public class silentPlayer : MonoBehaviour
     }
     private void Start()
     {
-        nms.BuildNavMesh();
+       // nms.BuildNavMesh();
     }
 
     private void Update()
