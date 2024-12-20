@@ -47,8 +47,15 @@ Shader "CustomRenderTexture/OutLine"
 
 				float3 cameraForwardWorld = mul((float3x3)unity_CameraToWorld, float3(0, 0, 1));
 				float3 cameraForwardObject = mul((float3x3)unity_WorldToObject, cameraForwardWorld);
+				
+				float3 correctedNormal = v.normal;
+				if(dot(v.normal, cameraForwardObject) < 0)
+				{
+					correctedNormal = -v.normal;	//Normal 뒤집기
+				}
 
-				float3 tangent = cross(cameraForwardObject, v.normal);
+				//아웃라인 방향 계산
+				float3 tangent = cross(cameraForwardObject, correctedNormal);
 				float3 projectedNormal = cross(cameraForwardObject, tangent);
 
 				projectedNormal = normalize(-projectedNormal) * _Width;
