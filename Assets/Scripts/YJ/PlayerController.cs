@@ -10,7 +10,7 @@ public class PlayerCameraController : MonoBehaviour
     public OVRInput.Controller leftController;  // 왼쪽 컨트롤러
     public OVRInput.Controller rightController; // 오른쪽 컨트롤러
 
-    [SerializeField] private float moveSpeed = 1.0f;    // 이동 속도
+    [SerializeField] private float moveSpeed = 1.0f;          // 이동 속도
     [SerializeField] private float accelerationFactor = 2.0f; // 가속도 계수
     [SerializeField] private float dampingFactor = 0.99f;     // 감속 계수(관성)
     [SerializeField] private float wheelRotationSpeed = 100f; // 휠 회전 속도
@@ -18,7 +18,7 @@ public class PlayerCameraController : MonoBehaviour
     private Vector3 velocity = Vector3.zero; // 현재 이동 속도
     private Quaternion initialLeftControllerRotation;  // 왼쪽 컨트롤러 초기 회전
     private Quaternion initialRightControllerRotation; // 오른쪽 컨트롤러 초기 회전
-    private bool isLeftRotating = false; // 왼쪽 회전 상태
+    private bool isLeftRotating = false;  // 왼쪽 회전 상태
     private bool isRightRotating = false; // 오른쪽 회전 상태
 
     private void Update()
@@ -26,19 +26,22 @@ public class PlayerCameraController : MonoBehaviour
         // 두 컨트롤러의 입력을 결합하여 이동 처리
         bool isMoving = HandleMovement(leftController, rightController);
 
+        bool leftRotated = false;
+        bool rightRotated = false;
+
         if (!isMoving)
         {
             // 각각의 컨트롤러로 회전 처리
             // 왼쪽 컨트롤러: 우회전만
-            HandleRotation(
+            leftRotated = HandleRotation(
                 leftController, ref initialLeftControllerRotation, ref isLeftRotating, true);
             // 오른쪽 컨트롤러: 좌회전만
-            HandleRotation(
+            rightRotated = HandleRotation(
                 rightController, ref initialRightControllerRotation, ref isRightRotating, false);
         }
 
         // 휠 회전 동기화
-        SyncWheelRotation();
+        SyncWheelRotation(leftRotated, rightRotated);
 
         // 감속(관성) 처리 또는 브레이크 처리
         ApplyBrakingOrDamping(isMoving);
@@ -87,8 +90,10 @@ public class PlayerCameraController : MonoBehaviour
         return false; // 정지
     }
 
-    private void HandleRotation(OVRInput.Controller controller, ref Quaternion initialRotation, ref bool isRotating, bool isRightDirectionOnly)
+    private bool HandleRotation(OVRInput.Controller controller, ref Quaternion initialRotation, ref bool isRotating, bool isRightDirectionOnly)
     {
+        bool hasRotated = false;
+
         // Hand Trigger가 눌린 상태
         if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, controller))
         {
@@ -114,37 +119,36 @@ public class PlayerCameraController : MonoBehaviour
 
             // 방향에 따라 회전 처리
             if ((isRightDirectionOnly && yawDelta > 0) || (!isRightDirectionOnly && yawDelta < 0))
-            {                                                    
+            {
                 Vector3 pivot = isRightDirectionOnly ? leftWheel.position : rightWheel.position;
                 cameraRig.RotateAround(pivot, Vector3.up, yawDelta);
+                hasRotated = true;
             }
 
             initialRotation = currentRotation;
         }
+
+        return hasRotated;
     }
 
-    private void SyncWheelRotation()
+    private void SyncWheelRotation(bool leftRotated, bool rightRotated)
     {
         // 휠 회전 속도 계산
         float forwardSpeed = velocity.z; // 전/후진 속도
         float rotationSpeed = forwardSpeed * wheelRotationSpeed;
-
-        //// 좌회전/우회전 여부 체크
-        //float leftRotation = isLeftRotating ? rotationSpeed : 0f;
-        //float rightRotation = isRightRotating ? rotationSpeed : 0f;
 
         // 전/후진 시 양쪽 휠 회전
         leftWheel.Rotate(Vector3.right, rotationSpeed * Time.deltaTime);
         rightWheel.Rotate(Vector3.right, rotationSpeed * Time.deltaTime);
 
         // 좌회전 시 오른쪽 바퀴만 회전
-        if (isLeftRotating)
+        if (leftRotated)
         {
             rightWheel.Rotate(Vector3.right, wheelRotationSpeed * Time.deltaTime);
         }
 
         // 우회전 시 왼쪽 바퀴만 회전
-        if (isRightRotating)
+        if (rightRotated)
         {
             leftWheel.Rotate(Vector3.right, wheelRotationSpeed * Time.deltaTime);
         }
@@ -172,4 +176,6 @@ public class PlayerCameraController : MonoBehaviour
             velocity *= dampingFactor;
         }
     }
+
+    // SAVE POINT
 }
