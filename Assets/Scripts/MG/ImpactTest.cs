@@ -16,7 +16,7 @@ public class ImpactTest : MonoBehaviour
             {
                 // 클릭한 위치로 물체 이동
                 Vector3 clickPosition = hit.point;
-                targetObject.transform.position = clickPosition;
+                targetObject.transform.position = clickPosition + Vector3.up;
 
                 Debug.Log("좌표 이동: " + clickPosition);
 
