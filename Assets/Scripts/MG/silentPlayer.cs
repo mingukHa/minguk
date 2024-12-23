@@ -7,12 +7,14 @@ public class slientPlayer : MonoBehaviour
     public float rotateSpeed = 180f; // 회전 속도
     public float jumpHeight = 2f; // 점프 높이
     public float gravity = -9.81f; // 중력 값
-
+    public GameObject gameObject1;
     private Vector3 velocity; // 점프와 중력 속도 관리
     private bool isGrounded; // 바닥에 있는지 여부
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.T))
+            gameObject1.SetActive(true);
         // 바닥 감지
         isGrounded = characterController.isGrounded;
 
@@ -49,5 +51,7 @@ public class slientPlayer : MonoBehaviour
     {
         Debug.Log("충돌을 감지함");
     }
+
+
 }
 

@@ -4,58 +4,67 @@ using UnityEngine.AI;
 public class MonsterAI : MonoBehaviour
 {
     [SerializeField]
-    private float detectionRadius = 20f; // 탐지 반지름
+    private float detectionRadius = 10f; // 탐지 반경
     [SerializeField]
-    private float stopDistance = 1f; // 목표 위치에 도달했는지 확인하는 거리
-
-    public LayerMask detectionLayer; // 탐지할 레이어 (충돌 감지 대상)
-
-    private NavMeshAgent navMeshAgent; // NavMeshAgent 컴포넌트
-    private Vector3 targetPosition; // 목표 위치
-
-    private void Awake()
-    {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-    }
+    private float viewAngle = 45f; // 시야각 (좌우 45도)
+    [SerializeField]
+    private LayerMask detectionLayer; // 감지 대상의 레이어
+    [SerializeField]
+    private float visionDistance = 5f; // 시야 범위
 
     private void Update()
     {
-        // 목표에 도달했는지 확인
-        if (navMeshAgent.remainingDistance <= stopDistance && !navMeshAgent.pathPending)
-        {
-            navMeshAgent.ResetPath(); // 경로 초기화
-            Debug.Log("목표에 도달했습니다. 새로운 목표를 탐지합니다.");
-        }
+        DetectTargetsInView();
     }
 
-    private void DetectTarget()
+    private void DetectTargetsInView()
     {
-        // 탐지 반지름 내 충돌 감지
+        // 탐지 반경 내의 모든 Collider 가져오기
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, detectionLayer);
 
-        if (hitColliders.Length > 0)
+        foreach (Collider collider in hitColliders)
         {
-            // 충돌 지점 중 첫 번째를 목표 위치로 설정
-            targetPosition = hitColliders[0].ClosestPoint(transform.position);
+            Vector3 directionToTarget = (collider.transform.position - transform.position).normalized;
 
-            Debug.Log("탐지된 목표 좌표: " + targetPosition);
+            // 시야각 내에 있는지 확인
+            float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
+            if (angleToTarget > viewAngle / 2) continue;
 
-            // NavMeshAgent를 사용해 목표로 이동
-            navMeshAgent.SetDestination(targetPosition);
-        }
-        else
-        {
-            Debug.Log("탐지할 대상이 없습니다. 대기 중...");
+            // 타겟이 시야 거리 내에 있는지 확인
+            if (Vector3.Distance(transform.position, collider.transform.position) > visionDistance) continue;
+
+            Debug.Log("시야 내 타겟 발견: " + collider.name);
         }
     }
 
     private void OnDrawGizmosSelected()
     {
-        // 탐지 반지름 시각화
+        // 탐지 반경 시각화
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
+
+        // 시야각 시각화
+        Vector3 forward = transform.forward * visionDistance;
+        Vector3 leftBoundary = Quaternion.Euler(0, -viewAngle / 2, 0) * forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, viewAngle / 2, 0) * forward;
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, transform.position + leftBoundary);
+        Gizmos.DrawLine(transform.position, transform.position + rightBoundary);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
