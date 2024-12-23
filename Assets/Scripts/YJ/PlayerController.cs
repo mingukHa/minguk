@@ -114,38 +114,42 @@ public class PlayerCameraController : MonoBehaviour
 
             // 방향에 따라 회전 처리
             if ((isRightDirectionOnly && yawDelta > 0) || (!isRightDirectionOnly && yawDelta < 0))
-            {
-                cameraRig.Rotate(Vector3.up, yawDelta);
+            {                                                    
+                Vector3 pivot = isRightDirectionOnly ? leftWheel.position : rightWheel.position;
+                cameraRig.RotateAround(pivot, Vector3.up, yawDelta);
             }
 
             initialRotation = currentRotation;
         }
     }
+
     private void SyncWheelRotation()
     {
         // 휠 회전 속도 계산
         float forwardSpeed = velocity.z; // 전/후진 속도
         float rotationSpeed = forwardSpeed * wheelRotationSpeed;
 
-        // 좌회전/우회전 여부 체크
-        float leftRotation = isLeftRotating ? rotationSpeed : 0f;
-        float rightRotation = isRightRotating ? rotationSpeed : 0f;
+        //// 좌회전/우회전 여부 체크
+        //float leftRotation = isLeftRotating ? rotationSpeed : 0f;
+        //float rightRotation = isRightRotating ? rotationSpeed : 0f;
 
         // 전/후진 시 양쪽 휠 회전
         leftWheel.Rotate(Vector3.right, rotationSpeed * Time.deltaTime);
         rightWheel.Rotate(Vector3.right, rotationSpeed * Time.deltaTime);
 
-        // 회전 시 한쪽 휠만 추가 회전
-        if (leftRotation != 0)
+        // 좌회전 시 오른쪽 바퀴만 회전
+        if (isLeftRotating)
         {
-            leftWheel.Rotate(Vector3.right, leftRotation * Time.deltaTime);
+            rightWheel.Rotate(Vector3.right, wheelRotationSpeed * Time.deltaTime);
         }
 
-        if (rightRotation != 0)
+        // 우회전 시 왼쪽 바퀴만 회전
+        if (isRightRotating)
         {
-            rightWheel.Rotate(Vector3.right, rightRotation * Time.deltaTime);
+            leftWheel.Rotate(Vector3.right, wheelRotationSpeed * Time.deltaTime);
         }
     }
+
     private void ApplyBrakingOrDamping(bool isMoving)
     {
         if (isMoving)
