@@ -21,6 +21,12 @@ public class PlayerController : MonoBehaviour
     private bool isLeftRotating = false;  // 왼쪽 회전 상태
     private bool isRightRotating = false; // 오른쪽 회전 상태
 
+
+    private void Start()
+    {
+        cameraRig.position = new Vector3(0f, 1f, 0f);
+    }
+
     private void Update()
     {
         // 두 컨트롤러의 입력을 결합하여 이동 처리
