@@ -12,7 +12,8 @@
         _RingTex("Ring Texture", 2D) = "white" {}
         _OutlineColor("OutlineColor", Color) = (0, 0, 0, 1)
         _OutlineWidth("Outline Width", float) = 0.02
-        _OutlineEndOffset("Outline End Offset", Float) = 0.1 // 아웃라인 끝 지점 오프셋
+        _OutlineAlpha("Outline Alpha", Float) = 1.0
+
 
         _RingFadeDuration("Ring Fade Duration", Float) = 2
     }
@@ -155,6 +156,7 @@
             float4 _hitPts[100];
             float _StartTime;
             float _RingFadeDuration;
+            float _OutlineAlpha;
 
 
             v2f vert(appdata v)
@@ -185,7 +187,9 @@
             fixed4 frag(v2f i) : SV_Target
             {
                 fixed4 col = _OutlineColor;
-                col.a = 0; // 기본 알파값 0
+                col.a = _OutlineAlpha;; // 기본 알파값 1
+
+
 
                 float mostRecentTime = -1.0; // 가장 최근 파동의 시간
                 float3 mostRecentPos = float3(0, 0, 0); // 가장 최근 파동의 위치
