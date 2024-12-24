@@ -5,19 +5,21 @@ TagManager:
   serializedVersion: 3
   tags:
   - Monster
+  - Floor
+  - Object
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Muse Animate Posing
+  - asss
   - Water
   - UI
   - Muse Animate Baking
   - Muse Animate Handles
   - Muse Animate Thumbnail
   - Muse Animate Environment
-  - 
-  - 
+  - Player
+  - Object
   - 
   - 
   - 
