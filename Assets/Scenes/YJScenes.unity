@@ -8941,7 +8941,7 @@ MonoBehaviour:
   requestRecordAudioPermissionOnStartup: 0
   _localDimming: 1
   _trackingOriginType: 1
-  usePositionTracking: 1
+  usePositionTracking: 0
   useRotationTracking: 1
   useIPDInPositionTracking: 1
   resetTrackerOnLoad: 0
@@ -8995,13 +8995,14 @@ Transform:
   m_GameObject: {fileID: 619341427}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 601957535}
   - {fileID: 740377656}
   - {fileID: 2015564314}
+  - {fileID: 585535993}
   m_Father: {fileID: 1071693087}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &625372174
@@ -15318,7 +15319,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 619341432}
-  - {fileID: 585535993}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1073573979
@@ -22053,7 +22053,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1071693087}
+    m_TransformParent: {fileID: 619341432}
     m_Modifications:
     - target: {fileID: 2346236693461991987, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22061,7 +22061,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2346236693461991987, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2346236693461991987, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -22104,9 +22104,33 @@ PrefabInstance:
       value: RightWheel
       objectReference: {fileID: 0}
     - target: {fileID: 8764103107652454986, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
+      propertyPath: offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764103107652454986, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
+      propertyPath: offset.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764103107652454986, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
+      propertyPath: offset.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764103107652454986, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
       propertyPath: cameraRig
       value: 
       objectReference: {fileID: 619341432}
+    - target: {fileID: 8764103107652454986, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
+      propertyPath: leftWheel
+      value: 
+      objectReference: {fileID: 491986990}
+    - target: {fileID: 8764103107652454986, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764103107652454986, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
+      propertyPath: rightWheel
+      value: 
+      objectReference: {fileID: 1856490773}
     - target: {fileID: 9033706703351619583, guid: d2e8c4942af99c143a3f6e55a6c91c7f, type: 3}
       propertyPath: m_Name
       value: LeftWheel
