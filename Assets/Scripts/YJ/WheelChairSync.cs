@@ -15,10 +15,7 @@ public class WheelChairSync : MonoBehaviour
     private void Update()
     {
         // 위치값 동기화 + 오프셋 적용
-        wheelchair.position = cameraRig.position + cameraRig.rotation * offset;
-
-        // 위치값 동기화
-        //wheelchair.position = cameraRig.position;
+        wheelchair.position = cameraRig.position + offset;
 
         // 회전값 동기화
         wheelchair.rotation = cameraRig.rotation;

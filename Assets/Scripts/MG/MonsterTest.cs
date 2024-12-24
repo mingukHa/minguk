@@ -6,8 +6,8 @@ public class MonsterTest : MonoBehaviour
 {
     [SerializeField]
     private float detectionRadius = 10f; // 충격 탐지 반경
-    
-    public float viewAngle = 60f; // 근접 시야각 (좌우 60도)
+    [SerializeField]
+    private float viewAngle = 60f; // 근접 시야각 (좌우 60도)
     [SerializeField]
     private LayerMask detectionLayer; // 감지 대상의 레이어
     [SerializeField]
@@ -16,14 +16,17 @@ public class MonsterTest : MonoBehaviour
     private float idleTimeLimit = 10f; // 탐지 없을 때 원래 위치로 복귀 시간
     [SerializeField]
     private NavMeshAgent navAgent;
-
+    private Animator animator;
     private enum MonsterState { Idle, Walking, Quest, Attack, Returning , Detect} //대기, 걷기 , 탐색, 공격, 돌아가기
     private MonsterState currentState = MonsterState.Idle;
 
     private Vector3 originalPosition; // 몬스터 원래 위치
     private Vector3 targetPosition; // 이동할 목표 지점
     private Transform detectedTarget; // 탐지된 타겟
-  
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void Start()
     {

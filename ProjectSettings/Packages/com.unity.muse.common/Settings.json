@@ -4,12 +4,20 @@
             {
                 "type": "Unity.Muse.Common.PreferenceDataWrapper`1[[System.Collections.Generic.List`1[[Unity.Muse.Common.Account.OrganizationInfo, Unity.Muse.Common, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]",
                 "key": "Unity.Muse.Common.Preferences.organizations",
+<<<<<<< HEAD
                 "value": "{\"value\":[{\"rid\":1000}],\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"OrganizationInfo\",\"ns\":\"Unity.Muse.Common.Account\",\"asm\":\"Unity.Muse.Common\"},\"data\":{\"org_id\":\"14568938473717\",\"org_name\":\"kimminsung7208\",\"status\":\"free-trial\"}}]}}"
+=======
+                "value": "{\"value\":[{\"rid\":1000}],\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"OrganizationInfo\",\"ns\":\"Unity.Muse.Common.Account\",\"asm\":\"Unity.Muse.Common\"},\"data\":{\"org_id\":\"14569015931338\",\"org_name\":\"DunkinHead\",\"status\":\"not-entitled\"}}]}}"
+>>>>>>> 8b0f7b4d31faf63551cc87c4aad4c0e95e223fa5
             },
             {
                 "type": "Unity.Muse.Common.PreferenceDataWrapper`1[[Unity.Muse.Common.Account.OrganizationInfo, Unity.Muse.Common, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]]",
                 "key": "Unity.Muse.Common.Preferences.organization",
+<<<<<<< HEAD
                 "value": "{\"value\":{\"rid\":1000},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"OrganizationInfo\",\"ns\":\"Unity.Muse.Common.Account\",\"asm\":\"Unity.Muse.Common\"},\"data\":{\"org_id\":\"14568938473717\",\"org_name\":\"kimminsung7208\",\"status\":\"free-trial\"}}]}}"
+=======
+                "value": "{\"value\":{\"rid\":1000},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"OrganizationInfo\",\"ns\":\"Unity.Muse.Common.Account\",\"asm\":\"Unity.Muse.Common\"},\"data\":{\"org_id\":\"14569015931338\",\"org_name\":\"DunkinHead\",\"status\":\"not-entitled\"}}]}}"
+>>>>>>> 8b0f7b4d31faf63551cc87c4aad4c0e95e223fa5
             },
             {
                 "type": "Unity.Muse.Common.PreferenceDataWrapper`1[[System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]",

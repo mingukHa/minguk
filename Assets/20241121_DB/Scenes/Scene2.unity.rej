@@ -1,0 +1,9 @@
+diff a/Team4/Assets/20241121_DB/Scenes/Scene2.unity b/Team4/Assets/20241121_DB/Scenes/Scene2.unity	(rejected hunks)
+@@ -1083,7 +1083,6 @@
+   storeitem_list: {fileID: 148696123}
+   invenItemsHolder: {fileID: 1084081376}
+   subCamera: {fileID: 1658573224}
+-  storeitem_list: {fileID: 148696123}
+ --- !u!1 &817791777 stripped
+ GameObject:
+   m_CorrespondingSourceObject: {fileID: 6582829690385482038, guid: 68e0dc0f6e4fae04ea419996f9341e7e, type: 3}
