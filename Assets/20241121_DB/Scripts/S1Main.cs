@@ -1,11 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 using TMPro;
-using Firebase;
-using Firebase.Database;
+using Firebase.Auth;
 using Firebase.Extensions;
-using System.Collections.Generic;
 
 public class S1Main : MonoBehaviour
 {
@@ -28,25 +27,12 @@ public class S1Main : MonoBehaviour
     [SerializeField]
     private TMP_InputField password;
 
-    // Firebase 객체들
-    private DatabaseReference database;
+    private FirebaseAuth auth;
 
     private void Start()
     {
-        // Firebase 초기화
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-        {
-            if (task.Result == DependencyStatus.Available)
-            {
-                FirebaseApp app = FirebaseApp.DefaultInstance;
-                database = FirebaseDatabase.DefaultInstance.RootReference;
-                Debug.Log("Firebase 초기화 완료");
-            }
-            else
-            {
-                Debug.LogError($"Firebase 초기화 실패: {task.Result}");
-            }
-        });
+        // Firebase Authentication 초기화
+        auth = FirebaseAuth.DefaultInstance;
 
         // 버튼 이벤트 연결
         Loginbt.onClick.AddListener(() => Login(username.text, password.text));
@@ -55,58 +41,36 @@ public class S1Main : MonoBehaviour
         Jclosebt.onClick.AddListener(() => Jclose(false));
         Eclosebt.onClick.AddListener(() => Eclose(false));
     }
-
-    private void Login(string id, string password)
+    
+    // Firebase로 로그인
+    private void Login(string email, string password)
     {
-        Debug.Log($"로그인 시도: {id}, {password}");
+        FirebaseAuth auth = FirebaseAuth.DefaultInstance;
 
-        // Firebase Realtime Database에서 사용자 데이터 확인
-        database.Child("users").OrderByChild("id").EqualTo(id).GetValueAsync().ContinueWithOnMainThread(task =>
+        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
         {
-            if (task.IsFaulted || task.IsCanceled)
+            if (task.IsCanceled)
+            {
+                Debug.LogError("로그인이 취소되었습니다.");
+                return;
+            }
+            if (task.IsFaulted)
             {
                 Debug.LogError($"로그인 실패: {task.Exception}");
                 return;
             }
 
-            DataSnapshot snapshot = task.Result;
-            if (snapshot.Exists)
-            {
-                foreach (var user in snapshot.Children)
-                {
-                    // Firebase Snapshot을 Dictionary<string, object>로 변환
-                    var userData = user.Value as Dictionary<string, object>;
+            // AuthResult에서 FirebaseUser 가져오기
+            Firebase.Auth.AuthResult authResult = task.Result;
+            FirebaseUser user = authResult.User;
 
-                    if (userData != null && userData.ContainsKey("password"))
-                    {
-                        string storedPassword = userData["password"].ToString();
-
-                        if (storedPassword == password)
-                        {
-                            Debug.Log("로그인 성공");
-                            SceneManager.LoadScene("Scene2"); // 다음 씬으로 전환
-                            return;
-                        }
-                        else
-                        {
-                            Debug.LogError("비밀번호가 일치하지 않습니다.");
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("사용자 데이터에 비밀번호가 없습니다.");
-                        return;
-                    }
-                }
-            }
-            else
-            {
-                Debug.LogError("사용자를 찾을 수 없습니다.");
-            }
+            Debug.Log($"로그인 성공! 사용자 ID: {user.UserId}, 이메일: {user.Email}");
+            SceneManager.LoadScene("Scene2"); // 로그인 성공 시 다음 씬으로 전환
         });
     }
 
+
+    // 닫기 버튼 처리
     private void Jclose(bool close)
     {
         joinUI.SetActive(close);
@@ -117,31 +81,15 @@ public class S1Main : MonoBehaviour
         exitUI.SetActive(close);
     }
 
-    private void OnjoinUI(bool join)
-    {
-        joinUI.SetActive(join);
-    }
-
     private void OnExitUI(bool exit)
     {
         exitUI.SetActive(exit);
     }
 
-    [System.Serializable]
-    public class User
+    private void OnjoinUI(bool join)
     {
-        public string id;       // 사용자 ID
-        public string password; // 패스워드
-
-        public User(string id, string password)
-        {
-            this.id = id;
-            this.password = password;
-        }
+        joinUI.SetActive(join);
     }
 }
-
-
-
 
 

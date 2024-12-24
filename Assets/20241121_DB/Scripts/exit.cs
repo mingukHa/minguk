@@ -15,7 +15,7 @@ public class Exit : MonoBehaviour
     private Button exitbt;
     [SerializeField]
     private GameObject exitUI;
-    
+
 
     // Firebase Realtime Database ÂüÁ¶
     private DatabaseReference database;
@@ -82,4 +82,3 @@ public class Exit : MonoBehaviour
         });
     }
 }
-
