@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MonsterAI : MonoBehaviour
+public class Monsterai : MonoBehaviour
 {
     [SerializeField]
-    private float detectionRadius = 10f; // 탐지 반경
+    private float detectionRadius = 10f; // 충돌 탐지 반경
     [SerializeField]
     private float viewAngle = 45f; // 시야각 (좌우 45도)
     [SerializeField]
@@ -12,12 +12,14 @@ public class MonsterAI : MonoBehaviour
     [SerializeField]
     private float visionDistance = 5f; // 시야 범위
 
+    private enum MosterState { Idle, Walking, Quest, Attack } //애니메이터 상태
+
     private void Update()
     {
         DetectTargetsInView();
     }
 
-    private void DetectTargetsInView()
+    private void DetectTargetsInView() //탐지 범위
     {
         // 탐지 반경 내의 모든 Collider 가져오기
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, detectionLayer);
@@ -36,14 +38,7 @@ public class MonsterAI : MonoBehaviour
             Debug.Log("시야 내 타겟 발견: " + collider.name);
         }
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Floor") 
-        {
-            Debug.Log("오브젝트 콜라이더가 닿았습니다");
-        }
-    }
-
+   
     private void OnDrawGizmosSelected()
     {
         // 탐지 반경 시각화

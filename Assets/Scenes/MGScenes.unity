@@ -255,24 +255,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &401195295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401195293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee633c4c73d8a934f82dcff6bf0af0bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectionRadius: 10
-  viewAngle: 45
-  detectionLayer:
-    serializedVersion: 2
-    m_Bits: 2048
-  visionDistance: 5
 --- !u!54 &401195299
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -300,6 +282,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &401195302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401195293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5cb4b9c1d9f2524699253fa42b10add, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 15
+  viewAngle: 60
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  visionDistance: 5
+  idleTimeLimit: 10
+  navAgent: {fileID: 401195294}
 --- !u!1001 &759543117
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -927,19 +929,27 @@ PrefabInstance:
       propertyPath: m_Name
       value: Characters_Zombie_Pacient_04
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 4dd08149a73761d46945acc455781ac0, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 14b4f35a3e90f424887d40186aa1a97b, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 4dd08149a73761d46945acc455781ac0, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4dd08149a73761d46945acc455781ac0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 401195295}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4dd08149a73761d46945acc455781ac0, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 401195294}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4dd08149a73761d46945acc455781ac0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 401195299}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4dd08149a73761d46945acc455781ac0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 401195302}
   m_SourcePrefab: {fileID: 100100000, guid: 4dd08149a73761d46945acc455781ac0, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
