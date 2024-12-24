@@ -17,7 +17,7 @@ public class MonsterTest : MonoBehaviour
     [SerializeField]
     private NavMeshAgent navAgent;
 
-    private enum MonsterState { Idle, Walking, Quest, Attack, Returning } //대기, 걷기 , 탐색, 공격, 돌아가기
+    private enum MonsterState { Idle, Walking, Quest, Attack, Returning , Detect} //대기, 걷기 , 탐색, 공격, 돌아가기
     private MonsterState currentState = MonsterState.Idle;
 
     private Vector3 originalPosition; // 몬스터 원래 위치
@@ -51,6 +51,9 @@ public class MonsterTest : MonoBehaviour
                 break;
             case MonsterState.Returning: //돌아간다
                 
+                break;
+            case MonsterState.Detect: //근접 탐지 시
+
                 break;
         }
     }
