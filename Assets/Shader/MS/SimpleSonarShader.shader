@@ -12,6 +12,7 @@
         _RingTex("Ring Texture", 2D) = "white" {}
         _OutlineColor("OutlineColor", Color) = (0, 0, 0, 1)
         _OutlineWidth("Outline Width", float) = 0.02
+        _DistanceFactor("Distance Factor", Float) = 0.1
         _OutlineAlpha("Outline Alpha", Float) = 1.0
 
 
@@ -157,32 +158,40 @@
             float _StartTime;
             float _RingFadeDuration;
             float _OutlineAlpha;
+            float _DistanceFactor; // 거리 기반 스케일링을 위한 팩터
 
 
             v2f vert(appdata v)
             {
                 v2f o;
 
-                // if (_OutlineWidth == 0)
-                //     _OutlineWidth = 2;
-
-                // 아웃라인 그리는 부분
+                // 월드 공간에서 정점 위치 계산
                 o.originalWorldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 
-                float3 cameraForwardWorld = mul((float3x3)unity_CameraToWorld, float3(0, 0, 1));
-                float3 cameraForwardObject = mul((float3x3)unity_WorldToObject, cameraForwardWorld);
+                // 오브젝트 중심 계산 (local space에서 원점 기준)
+                float3 objectCenterWorld = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
 
-                float3 tangent = cross(cameraForwardObject, v.normal);
-                float3 projectedNormal = cross(cameraForwardObject, tangent);
+                // 중심에서 정점으로 향하는 벡터
+                float3 outlineDirection = normalize(o.originalWorldPos - objectCenterWorld);
 
-                projectedNormal = normalize(-projectedNormal) * _OutlineWidth;
+                // 카메라와의 거리 비례한 스케일링
+                float distanceFromCamera = distance(o.originalWorldPos, _WorldSpaceCameraPos);
+                float outlineScale = _OutlineWidth * (1.0 + _DistanceFactor * distanceFromCamera);
 
-                v.vertex += float4(projectedNormal, 0);
+                // 아웃라인을 중심 방향으로 확장
+                float3 projectedNormal = outlineDirection * outlineScale;
+
+                // 정점 변위
+                v.vertex.xyz += projectedNormal;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz; // 월드 좌표 계산
+
+                // 변위된 월드 좌표 계산
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
+
 
             fixed4 frag(v2f i) : SV_Target
             {
