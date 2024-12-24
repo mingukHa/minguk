@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Windows.WebCam;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,6 +22,12 @@ public class PlayerController : MonoBehaviour
     private bool isLeftRotating = false;  // 왼쪽 회전 상태
     private bool isRightRotating = false; // 오른쪽 회전 상태
 
+
+    //private void Start()
+    //{
+    //    cameraRig.position = new Vector3(0f, 0f, 0f);
+    //    cameraRig.rotation = Quaternion.identity;
+    //}
     private void Update()
     {
         // 두 컨트롤러의 입력을 결합하여 이동 처리
@@ -47,7 +54,16 @@ public class PlayerController : MonoBehaviour
         ApplyBrakingOrDamping(isMoving);
 
         // 이동 적용
-        cameraRig.position += velocity * Time.deltaTime;
+        Vector3 newPosition = cameraRig.position + velocity * Time.deltaTime;
+
+        // z축 값이 음수로 이동하지 않도록 제한
+        if (newPosition.z < 0)
+        {
+            newPosition.z = 0;
+            velocity.z = Mathf.Max(0, velocity.z); // z축 속도도 양수로 보정
+        }
+
+        cameraRig.position = newPosition;
     }
 
     private bool HandleMovement(OVRInput.Controller left, OVRInput.Controller right)
