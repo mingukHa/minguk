@@ -15,28 +15,13 @@ public class Exit : MonoBehaviour
     private Button exitbt;
     [SerializeField]
     private GameObject exitUI;
-    
+
 
     // Firebase Realtime Database 참조
     private DatabaseReference database;
 
     private void Start()
     {
-        // Firebase 초기화
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.Result == DependencyStatus.Available)
-            {
-                FirebaseApp app = FirebaseApp.DefaultInstance;
-                database = FirebaseDatabase.DefaultInstance.RootReference;
-                Debug.Log("Firebase 초기화 완료");
-            }
-            else
-            {
-                Debug.LogError($"Firebase 초기화 실패: {task.Result}");
-            }
-        });
-
         // 버튼 클릭 시 계정 삭제 코루틴 실행
         exitbt.onClick.AddListener(() => DeleteAccount(Username.text.Trim(), Password.text.Trim()));
     }
@@ -97,4 +82,3 @@ public class Exit : MonoBehaviour
         });
     }
 }
-
