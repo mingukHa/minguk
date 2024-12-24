@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerCameraController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public Transform cameraRig; // 카메라 리그
 
