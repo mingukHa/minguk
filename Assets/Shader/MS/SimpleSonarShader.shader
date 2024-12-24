@@ -159,30 +159,30 @@
             float _RingFadeDuration;
             float _OutlineAlpha;
             float _DistanceFactor; // 거리 기반 스케일링을 위한 팩터
+            float _OutlinePower; // Fresnel 효과의 강도 조절
 
 
             v2f vert(appdata v)
             {
                 v2f o;
 
-                // 월드 공간에서 정점 위치 계산
+                // 월드 좌표 계산
                 o.originalWorldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 
-                // 오브젝트 중심 계산 (local space에서 원점 기준)
-                float3 objectCenterWorld = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
+                // 카메라 방향 계산
+                float3 viewDir = normalize(_WorldSpaceCameraPos - o.originalWorldPos);
+                // 법선 방향
+                float3 normal = normalize(mul((float3x3)unity_ObjectToWorld, v.normal));
 
-                // 중심에서 정점으로 향하는 벡터
-                float3 outlineDirection = normalize(o.originalWorldPos - objectCenterWorld);
+                // Fresnel 효과 계산 (내적값을 사용)
+                float fresnel = 1.0 - saturate(dot(viewDir, normal));
+                fresnel = pow(fresnel, _OutlinePower); // 강조 정도를 조절
 
-                // 카메라와의 거리 비례한 스케일링
-                float distanceFromCamera = distance(o.originalWorldPos, _WorldSpaceCameraPos);
-                float outlineScale = _OutlineWidth * (1.0 + _DistanceFactor * distanceFromCamera);
+                // 아웃라인 크기 적용
+                float outlineScale = _OutlineWidth * fresnel * (1.0 + _DistanceFactor * distance(o.originalWorldPos, _WorldSpaceCameraPos));
 
-                // 아웃라인을 중심 방향으로 확장
-                float3 projectedNormal = outlineDirection * outlineScale;
-
-                // 정점 변위
-                v.vertex.xyz += projectedNormal;
+                // 법선 방향으로 정점 이동 (아웃라인 생성)
+                v.vertex.xyz += normal * outlineScale;
                 o.vertex = UnityObjectToClipPos(v.vertex);
 
                 // 변위된 월드 좌표 계산
