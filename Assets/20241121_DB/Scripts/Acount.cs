@@ -22,14 +22,6 @@ public class Account : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI PasswordMatchIcon;
     [SerializeField]
-    private TextMeshProUGUI IdCheckMessage;
-    [SerializeField]
-    private TextMeshProUGUI IdCheckIcon;
-    [SerializeField]
-    private Button IdCheckButton;
-    [SerializeField]
-    private TextMeshProUGUI IdCheckResult;
-    [SerializeField]
     private Button SignupButton;
     [SerializeField]
     private GameObject AccountUI;
@@ -39,25 +31,9 @@ public class Account : MonoBehaviour
 
     private void Start()
     {
-        // Firebase 초기화
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-        {
-            if (task.Result == DependencyStatus.Available)
-            {
-                FirebaseApp app = FirebaseApp.DefaultInstance;
-                database = FirebaseDatabase.DefaultInstance.RootReference;
-                Debug.Log("Firebase 초기화 완료");
-            }
-            else
-            {
-                Debug.LogError($"Firebase 초기화 실패: {task.Result}");
-            }
-        });
-
         SignupButton.interactable = false; // 회원가입 버튼 비활성화
         Password.onValueChanged.AddListener(OnPasswordChanged);
         PasswordCheck.onValueChanged.AddListener(OnPasswordCheckChanged);
-        IdCheckButton.onClick.AddListener(CheckUsernameAvailability);
         SignupButton.onClick.AddListener(() => RegisterUser(Username.text, Password.text));
     }
 
@@ -68,7 +44,7 @@ public class Account : MonoBehaviour
 
     private void EnableSignupButton()
     {
-        if (IdCheckResult.color == Color.green && PasswordCheckIcon.color == Color.green && PasswordMatchIcon.color == Color.green)
+        if (PasswordCheckIcon.color == Color.green && PasswordMatchIcon.color == Color.green)
         {
             SignupButton.interactable = true; // 모든 조건이 충족되면 활성화
         }
@@ -82,31 +58,6 @@ public class Account : MonoBehaviour
     {
         Debug.Log($"{username}, {password} 값 들어옴");
 
-        // 사용자 ID 중복 확인
-        database.Child("users").OrderByChild("username").EqualTo(username).GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                Debug.LogError($"회원가입 실패: {task.Exception}");
-                return;
-            }
-
-            DataSnapshot snapshot = task.Result;
-            if (snapshot.Exists)
-            {
-                Debug.LogError("이미 존재하는 사용자 ID입니다.");
-                IdCheckMessage.text = "이미 존재하는 사용자 ID입니다.";
-                IdCheckMessage.color = Color.red;
-            }
-            else
-            {
-                SaveUserData(username, password);
-            }
-        });
-    }
-
-    private void SaveUserData(string username, string password)
-    {
         string userId = database.Push().Key; // 고유 키 생성
         User user = new User(username, password);
 
@@ -120,47 +71,9 @@ public class Account : MonoBehaviour
             else
             {
                 Debug.Log("회원가입 성공");
-                IdCheckMessage.text = "회원가입이 완료되었습니다.";
-                IdCheckMessage.color = Color.green;
+                PasswordMessage.text = "회원가입이 완료되었습니다.";
+                PasswordMessage.color = Color.green;
                 AccountUI.SetActive(false); // 회원가입 UI 닫기
-            }
-        });
-    }
-
-    private void CheckUsernameAvailability()
-    {
-        string username = Username.text.Trim();
-
-        if (string.IsNullOrEmpty(username))
-        {
-            IdCheckMessage.text = "아이디를 입력하세요.";
-            IdCheckMessage.color = Color.red;
-            IdCheckIcon.text = "X";
-            IdCheckIcon.color = Color.red;
-            return;
-        }
-
-        database.Child("users").OrderByChild("username").EqualTo(username).GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsFaulted || task.IsCanceled)
-            {
-                Debug.LogError($"아이디 중복 확인 실패: {task.Exception}");
-                return;
-            }
-
-            if (task.Result.Exists)
-            {
-                IdCheckResult.color = Color.red;
-                IdCheckResult.text = "X";
-                IdCheckMessage.text = "이미 사용 중인 아이디입니다.";
-                IdCheckMessage.color = Color.red;
-            }
-            else
-            {
-                IdCheckResult.color = Color.green;
-                IdCheckResult.text = "O";
-                IdCheckMessage.text = "사용 가능한 아이디입니다.";
-                IdCheckMessage.color = Color.green;
             }
         });
     }
@@ -176,7 +89,7 @@ public class Account : MonoBehaviour
         }
         else
         {
-            PasswordMessage.text = "비밀번호는 영어와 숫자로 4~10자 이내로 입력하세요.";
+            PasswordMessage.text = "비밀번호는 영어와 숫자로 6~10자 이내로 입력하세요.";
             PasswordMessage.color = Color.red;
             PasswordCheckIcon.text = "X";
             PasswordCheckIcon.color = Color.red;
@@ -230,5 +143,6 @@ public class User
         this.password = password;
     }
 }
+
 
 

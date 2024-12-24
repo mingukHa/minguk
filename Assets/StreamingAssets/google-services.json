@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "736400262258",
+    "firebase_url": "https://silent-wheel-139e7-default-rtdb.firebaseio.com",
+    "project_id": "silent-wheel-139e7",
+    "storage_bucket": "silent-wheel-139e7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736400262258:android:60451ae70cc6c2dc68eeeb",
+        "android_client_info": {
+          "package_name": "com.company.silentwheel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736400262258-q61upddif9elc5siehrd8it8d5ubakt4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJYj0MhBMOO9D-X4IzVsvUF2CczXk2cLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736400262258-q61upddif9elc5siehrd8it8d5ubakt4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
