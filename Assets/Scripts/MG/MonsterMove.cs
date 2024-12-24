@@ -36,6 +36,13 @@ public class MonsterAI : MonoBehaviour
             Debug.Log("시야 내 타겟 발견: " + collider.name);
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Floor") 
+        {
+            Debug.Log("오브젝트 콜라이더가 닿았습니다");
+        }
+    }
 
     private void OnDrawGizmosSelected()
     {

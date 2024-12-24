@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Monster
+  - Floor
+  - Object
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - Muse Animate Thumbnail
   - Muse Animate Environment
   - Player
-  - 
+  - Object
   - 
   - 
   - 
